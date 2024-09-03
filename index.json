@@ -1,0 +1,20 @@
+{
+  "recipes": [
+    {
+      "repo": "rime/rime-pinyin-simp",
+      "name": "袖珍简拼",
+      "schemas": [
+        "pinyin_simp"
+      ],
+      "license": "Apache-2.0"
+    },
+    {
+      "repo": "amorphobia/rime-jiandao",
+      "branch": "release",
+      "name": "星空键道",
+      "schemas": [
+        "jiandao"
+      ]
+    }
+  ]
+}
