@@ -1,1 +1,3 @@
 *.dll
+test.ahk
+Lib/JSON.ahk
