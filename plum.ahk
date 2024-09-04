@@ -19,10 +19,10 @@
 #Requires AutoHotkey v2.0
 #Include <JSON>
 
-MyGui := MainWindow(, "PLUM")
-MyGui.Show()
+main_window := PlumMainWindow(, "Plum")
+main_window.Show()
 
-class MainWindow extends Gui {
+class PlumMainWindow extends Gui {
     __New(options := "", title := A_ScriptName, event_obj?) {
         super.__New(options, title, event_obj?)
         this.Opt("-Resize")
@@ -56,8 +56,14 @@ class MainWindow extends Gui {
         ; vertical stacked
         {
             this.SetFont("s14")
-            this.repo_banner := this.AddText("xm+20 " . w, "Repository")
+            this.repo_banner := this.AddText(w, "Repository")
             this.SetFont("s12")
+            this.repo_url_title := this.AddText(, "Repository URL")
+            this.repo_url := this.AddEdit("-Multi " . w)
+            this.repo_url.Value := "https://github.com/amorphobia/rime-jiandao"
+            this.repo_brch_title := this.AddText(, "Branch")
+            this.repo_brch := this.AddEdit("-Multi " . w)
+            this.repo_brch.Value := "release"
         }
 
         this.tab.UseTab()
