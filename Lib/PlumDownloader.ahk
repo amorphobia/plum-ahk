@@ -91,18 +91,24 @@ fetch(url) {
 }
 
 class PlumDownloader extends Object {
-    __New(target, schema_ids := []) {
-        local normalized := normalize_target(target)
-        if not normalized
-            throw Error("Invalid target")
-        this.repo := normalized.repo
-        this.branch := normalized.branch
-        this.path := normalized.path
+    ; __New(target, schema_ids := []) {
+    ;     local normalized := normalize_target(target)
+    ;     if not normalized
+    ;         throw Error("Invalid target")
+    ;     this.repo := normalized.repo
+    ;     this.branch := normalized.branch
+    ;     this.path := normalized.path
+    ;     this.prefix := this.get_prefix()
+    ;     if normalized.schema
+    ;         this.schema_ids := [normalized.schema]
+    ;     else
+    ;         this.schema_ids := schema_ids
+    ; }
+    __New(repo, branch := "", path := "") {
+        this.repo := repo
+        this.branch := branch
+        this.path := path
         this.prefix := this.get_prefix()
-        if normalized.schema
-            this.schema_ids := [normalized.schema]
-        else
-            this.schema_ids := schema_ids
     }
 
     get_prefix := (*) => ""
@@ -119,9 +125,9 @@ class PlumDownloader extends Object {
 }
 
 class PlumGitHubDownloader extends PlumDownloader {
-    get_prefix := (*) => Format("https://raw.githubusercontent.com/{}/{}/{}", this.repo, (this.branch or "HEAD"), this.path)
+    get_prefix := (*) => Format("https://raw.githubusercontent.com/{}/{}/{}", this.repo, (this.branch or "HEAD"), this.path == "" ? "" : (SubStr(this.path, -1) == "/" ? this.path : this.path . "/"))
 }
 
 class PlumJsDelivrDownloader extends PlumDownloader {
-    get_prefix := (*) => Format("https://cdn.jsdelivr.net/gh/{}{}/{}", this.repo, (this.branch ? "@" . this.branch : ""), this.path)
+    get_prefix := (*) => Format("https://cdn.jsdelivr.net/gh/{}{}/{}", this.repo, (this.branch ? "@" . this.branch : ""), this.path == "" ? "" : (SubStr(this.path, -1) == "/" ? this.path : this.path . "/"))
 }

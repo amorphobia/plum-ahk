@@ -17,6 +17,9 @@
  *
  */
 
+#Include <YAML>
+#Include <PlumParser>
+
 class PlumRecipe extends Object {
     __New(loader, options?) {
         this.loader := loader
@@ -43,7 +46,15 @@ class PlumRecipe extends Object {
 
             if SubStr(file, -5) = ".yaml" { ; case insensitive
                 if SubStr(file, -12) = ".schema.yaml" {
-                    ; FATAL: no available yaml libraries for AutoHotkey v2!!!
+                    try {
+                        obj := YAML.parse(content)
+                    } catch {
+                        throw Error("Invalid " . file)
+                    }
+                    local new_file_groups := parse_schema(obj)
+                    for new_file_group in new_file_groups {
+                        ; 
+                    }
                 }
             }
         }
