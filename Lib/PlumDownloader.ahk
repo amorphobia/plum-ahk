@@ -79,15 +79,21 @@ normalize_target(target) {
     return _match_plum(target) || _match_schema(target)
 }
 
-fetch(url) {
+fetch(url, proxy := "") {
     ; https://learn.microsoft.com/windows/win32/winhttp/winhttprequest
-    web := ComObject("WinHttp.WinHttpRequest.5.1")
-    web.Open("GET", url)
-    web.Send()
-    web.WaitForResponse()
-    if web.Status != 200
-        throw Error(web.Status)
-    return web.ResponseText
+    whr := ComObject("WinHttp.WinHttpRequest.5.1")
+    if proxy {
+        whr.SetProxy(
+            2, ; HTTPREQUEST_PROXYSETTING_PROXY
+            proxy
+        )
+    }
+    whr.Open("GET", url)
+    whr.Send()
+    whr.WaitForResponse()
+    if whr.Status != 200
+        throw Error(whr.Status)
+    return whr.ResponseText
 }
 
 class PlumDownloader extends Object {
