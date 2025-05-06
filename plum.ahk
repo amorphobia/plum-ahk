@@ -131,6 +131,12 @@ class PlumMainWindow extends Gui {
         }
 
         root := this._load_category(this.rppi_downloader)
+        if root.categories.Length <= 0 && root.recipes.Length <= 0 {
+            if IsSet(index_obj)
+                return index_obj
+            else
+                return 0
+        }
         root.name := "所有方案"
         root.date := A_Now
         msg := JSON.Dump(root)
