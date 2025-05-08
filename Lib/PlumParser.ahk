@@ -1,6 +1,6 @@
 /*
  * Copyright (c) LibreService <https://github.com/LibreService/micro_plum>
- * Copyright (c) 2024 Xuesong Peng <pengxuesong.cn@gmail.com>
+ * Copyright (c) 2024, 2025 Xuesong Peng <pengxuesong.cn@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,4 +102,82 @@ parse_schema(schema) {
         arr.Push(expand_lua(v))
     }
     return arr
+}
+
+parse_dict(schema) {
+    local result := []
+    for key, val in schema {
+        switch key {
+            case "import_tables":
+                if Type(val) = "Array" {
+                    for file in val
+                        result.Push([file . ".dict.yaml"])
+                }
+            case "vocabulary":
+                result.Push([val . ".txt"])
+        }
+    }
+    return result
+}
+
+parse_opencc(config) {
+    local result := []
+    add(file) {
+        if !result.Has(file) {
+            result.Push(file)
+        }
+    }
+    ; try {
+    ;     add(config["segmentation"]["dict"]["file"])
+    ;     chain := config["conversion_chain"]
+    ;     if chain && chain.Length > 0 {
+    ;         for obj in chain {
+                
+    ;         }
+    ;     }
+    ; }
+    try
+        add(config["segmentation"]["dict"]["file"])
+    try {
+        chain := config["conversion_chain"]
+    } catch {
+        chain := []
+    }
+    if chain && chain.Length > 0 {
+        for obj in chain {
+            try {
+                dict := obj["dict"]
+            } catch {
+                continue
+            }
+            try {
+                file := dict["file"]
+                if file
+                    add(file)
+            }
+            try {
+                dicts := dict["dicts"]
+                if dicts && dicts.Length > 0 {
+                    for item in dicts {
+                        try {
+                            file := item["file"]
+                            if file
+                                add(file)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    arr := []
+    for file in result {
+        arr.Push([file])
+    }
+    return arr
+}
+
+parse_lua(content) {
+    local lua_files := []
+    ; seems no existing lua parser written in AHK
 }

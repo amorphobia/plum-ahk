@@ -5,4 +5,4 @@
 
 #### Credits
 [cJson](https://github.com/G33kDude/cJson.ahk)
-[YAML.ahk](https://github.com/thqby/ahk2_lib/blob/1c08decaffde115b731425f60be66cf5ade1a091/YAML.ahk)
+[YAML.ahk](https://github.com/thqby/ahk2_lib/blob/f4d2d1fa8e88fd00a54cdf10d8cd7afe0552a186/YAML.ahk)
