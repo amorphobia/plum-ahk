@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Xuesong Peng <pengxuesong.cn@gmail.com>
+ * Copyright (c) 2024, 2025 Xuesong Peng <pengxuesong.cn@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,6 +102,8 @@ class PlumMainWindow extends Gui {
     _build_rppi_tree_view(load_preset := false) {
         this.rppi_schm.Delete()
         root_rppi := this._load_rppi(load_preset)
+        if !root_rppi
+            return
         root := this.rppi_schm.Add(root_rppi["name"], , "Expand")
         this.all_recipe_ctrl := Map()
         this._rppi_schm_add_cat_node(root_rppi["categories"], root)
@@ -109,16 +111,15 @@ class PlumMainWindow extends Gui {
     }
 
     _load_rppi(load_preset := false) {
-        url := this.rppi_downloader.get_url("index.json")
-        if not root_obj := JSON.Load(fetch(url, this.proxy.Value))
-            return 0
-
         try {
+            url := this.rppi_downloader.get_url("index.json")
+            response := fetch(url, this.proxy.Value)
+            root_obj := JSON.Load(response)
             date := root_obj["date"]
+            date := StrReplace(date, "-") . "000000"
         } catch {
-            return 0
+            load_preset := true
         }
-        date := StrReplace(date, "-") . "000000"
         old_date := "19700101000000"
         if FileExist("index.json") {
             index := FileRead("index.json", "UTF-8")
@@ -155,7 +156,10 @@ class PlumMainWindow extends Gui {
         }
         local url := dl.get_url("index.json")
         JSON.EscapeUnicode := false
-        if not obj := JSON.Load(fetch(url, this.proxy.Value)) {
+        response := fetch(url, this.proxy.Value)
+        if !response
+            return node
+        if not obj := JSON.Load(response) {
             return node
         }
         try {

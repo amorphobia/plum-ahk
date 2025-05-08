@@ -1,6 +1,6 @@
 /*
  * Copyright (c) LibreService <https://github.com/LibreService/micro_plum>
- * Copyright (c) 2024 Xuesong Peng <pengxuesong.cn@gmail.com>
+ * Copyright (c) 2024, 2025 Xuesong Peng <pengxuesong.cn@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,12 @@ fetch(url, proxy := "") {
         )
     }
     whr.Open("GET", url)
-    whr.Send()
+    try {
+        whr.Send()
+    } catch {
+        MsgBox("请求失败，请检查网络连接或设置代理。")
+        return ""
+    }
     whr.WaitForResponse()
     if whr.Status != 200
         throw Error(whr.Status)

@@ -1,6 +1,6 @@
 # 东风破 /plum/ 的 AutoHotkey 实现
 
-[!NOTE]
+> [!NOTE]
 > WIP
 
 #### Credits
